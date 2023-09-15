@@ -10,6 +10,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import seaborn as sns
 from wordcloud import WordCloud, STOPWORDS
 import joblib
+import streamlit as st
 
 import warnings
 
@@ -164,7 +165,7 @@ genre_tfidf_matrix
 
 #TFIDF + Cosine
 import pickle
-
+print ('Checkpoint')
 # Load the cosine similarity matrix and index mapping for description
 with open('TC_Anime_desc_cosine_sim.pkl', 'rb') as f:
     TC_Anime_desc_cosine_sim = pickle.load(f)
@@ -217,6 +218,7 @@ def TFIDF_Cosine_get_recommendations2(recommendations, closest_match):
 from scipy.stats import pearsonr
 from tqdm import tqdm  # Import tqdm for progress bar
 
+print ("Checkpoint")
 # Load the Pearson correlation results for description
 with open('TP_Anime_desc_pearson_sim.pkl', 'rb') as f:
     TP_Anime_desc_pearson_sim = pickle.load(f)
@@ -303,7 +305,7 @@ print("Matrix shape: " + str(genre_count_matrix.shape))
 genre_count_matrix
 
 #BOW + Cosine
-
+print ("Checkpoint")
 # Load the cosine similarity matrix and index mapping for description (BOW)
 with open('BC_Anime_desc_cosine_sim.pkl', 'rb') as f:
     BC_Anime_desc_cosine_sim = pickle.load(f)
@@ -375,7 +377,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy.stats import pearsonr
 from tqdm import tqdm  # Import tqdm for progress bar
-
+print ("Checkpoint")
 # Load the Pearson correlation matrix and index mapping for description (BOW)
 with open('BP_Anime_desc_pearson_sim.pkl', 'rb') as f:
     BP_Anime_desc_pearson_sim_df = pickle.load(f)
