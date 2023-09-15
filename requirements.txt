@@ -8,3 +8,4 @@ scipy
 seaborn
 tqdm
 wordcloud
+streamlit
