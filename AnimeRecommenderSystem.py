@@ -414,7 +414,7 @@ def BOW_Pearson_get_recommendations2(recommendations, closest_match):
     
     BP_sim_scores = list(enumerate(BP_Anime_genre_pearson_sim_df.iloc[idx]))
     BP_sim_scores = sorted(BP_sim_scores, key=lambda x: x[1], reverse=True)
-    anime_indices = [i[0] for i in BC_sim_scores]
+    anime_indices = [i[0] for i in BP_sim_scores]
     
     top_recommendations = anime_data.iloc[anime_indices]
     
