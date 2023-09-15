@@ -1,5 +1,8 @@
-nltk.download('punkt')
-
+from nltk.stem import WordNetLemmatizer
+from tqdm import tqdm 
+import nltk
+import re
+from nltk.corpus import stopwords
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics.pairwise import cosine_similarity
@@ -8,6 +11,8 @@ import seaborn as sns
 from wordcloud import WordCloud, STOPWORDS
 
 import warnings
+
+nltk.download('punkt')
 
 warnings.filterwarnings("ignore")
 
@@ -40,12 +45,6 @@ def WC_generate(col,size,words):
 WC_generate('Anime',1050,150)
 
 WC_generate('Studio',1000,100)
-
-from nltk.stem import WordNetLemmatizer
-from tqdm import tqdm 
-import nltk
-import re
-from nltk.corpus import stopwords
 
 tqdm.pandas()
 
