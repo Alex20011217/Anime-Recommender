@@ -421,5 +421,5 @@ def BOW_Pearson_get_recommendations2(recommendations, closest_match):
     print('Anime title: ' + anime_title)
     
     return top_recommendations[0:11]
-
+st.title("Checkpoint")
 
