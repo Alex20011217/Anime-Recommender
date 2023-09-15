@@ -483,6 +483,18 @@ if recommender_button:
 
         # Display the recommendations
         st.write(recommendations_df)
+        # Add image search and display below the recommendations
+        images_and_captions = []
+
+        for anime_title in recommendations_df['Anime']:
+            image_url = search_for_image(anime_title)  # Implement search_for_image function
+            images_and_captions.append((anime_title, image_url))
+
+        for anime_title, image_url in images_and_captions:
+            if image_url:
+                response = requests.get(image_url)
+                img = Image.open(BytesIO(response.content))
+                st.image(img, caption=anime_title, use_column_width=True)
         
     else:
         st.write("Please enter an anime name to get recommendations.")
