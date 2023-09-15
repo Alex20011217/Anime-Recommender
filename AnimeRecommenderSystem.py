@@ -14,6 +14,7 @@ import warnings
 
 nltk.download('punkt')
 nltk.download('stopwords')
+nltk.download('wordnet')
 
 warnings.filterwarnings("ignore")
 
