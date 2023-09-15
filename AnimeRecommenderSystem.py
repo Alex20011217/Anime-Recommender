@@ -421,6 +421,11 @@ def BOW_Pearson_get_recommendations2(recommendations, closest_match):
     print('Anime title: ' + anime_title)
     
     return top_recommendations[0:11]
+
+from PIL import Image
+import requests
+from io import BytesIO
+
 st.title("Anime Recommender System")
 with st.form("recommender"):
     # Create a selectbox to allow the user to choose the model
@@ -440,25 +445,41 @@ if recommender_button:
             # Your TF-IDF + Cosine recommendation code here using user_input
             RefinedVer_Recommendations = TFIDF_Cosine_get_recommendations1(user_input)
             recommendations_df = pd.DataFrame(RefinedVer_Recommendations[['Anime', 'cleaned_Genre', 'Description']][:4])
-            st.write(recommendations_df)
     
         elif recommender_type == "TF-IDF + Pearson":
             # Your TF-IDF + Pearson recommendation code here using user_input
             Pearson_Recommendations = TFIDF_Pearson_get_recommendations1(user_input)
             recommendations_df = pd.DataFrame(Pearson_Recommendations[['Anime', 'cleaned_Genre', 'Description']][:4])
-            st.write(recommendations_df)
     
         elif recommender_type == "BOW + Cosine":
             # Your BOW + Cosine recommendation code here using user_input
             RefinedVer_Recommendations = BOW_Cosine_get_recommendations1(user_input)
             recommendations_df = pd.DataFrame(RefinedVer_Recommendations[['Anime', 'cleaned_Genre', 'cleaned_Description']][:4])
-            st.write(recommendations_df)
     
         elif recommender_type == "BOW + Pearson":
             # Your BOW + Pearson recommendation code here using user_input
             RefinedVer_Recommendations = BOW_Pearson_get_recommendations1(user_input)
             recommendations_df = pd.DataFrame(RefinedVer_Recommendations[['Anime', 'cleaned_Genre', 'cleaned_Description']][:4])
-            st.write(recommendations_df)
+
+        # Display the recommendations
+        st.write(recommendations_df)
+
+        # Fetch and display images for each recommended anime
+        st.write("Images for Recommended Anime:")
+        for _, row in recommendations_df.iterrows():
+            anime_title = row['Anime']
+        
+            # Use the anime title to search for images (you need to implement this part)
+            image_url = search_for_image(anime_title)  # Implement search_for_image function
+        
+        # Display the image below the anime title
+        if image_url:
+            response = requests.get(image_url)
+            img = Image.open(BytesIO(response.content))
+            st.image(img, caption=anime_title, use_column_width=True)
+        else:
+            st.write(f"No image found for {anime_title}")
+        
         
         else:
             st.write("Please select a valid recommendation type.")
