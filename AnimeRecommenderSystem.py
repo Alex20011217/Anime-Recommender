@@ -422,32 +422,6 @@ def BOW_Pearson_get_recommendations2(recommendations, closest_match):
     
     return top_recommendations[0:11]
 
-from PIL import Image
-import requests
-from io import BytesIO
-from googleapiclient.discovery import build
-
-# Define your Custom Search Engine ID (CX)
-CX = '102547c048ba84fc7D'  # Replace with your actual CX
-
-def search_for_image(anime_title):
-    try:
-        # Create a service object for the Custom Search JSON API
-        service = build("customsearch", "v1")
-
-        # Perform a search for images related to the anime title
-        res = service.cse().list(q=anime_title, cx=CX, searchType='image').execute()
-
-        # Extract and return the first image URL from the search results
-        if 'items' in res and len(res['items']) > 0:
-            return res['items'][0]['link']
-        else:
-            return None
-    except Exception as e:
-        print(f"Error searching for image: {e}")
-        return None
-
-
 st.title("Anime Recommender System")
 with st.form("recommender"):
     # Create a selectbox to allow the user to choose the model
@@ -460,7 +434,6 @@ with st.form("recommender"):
     recommender_button = st.form_submit_button("Submit")
 
 if recommender_button:
-    recommender_type = st.selectbox("Select a recommendation type", ["TF-IDF + Cosine", "TF-IDF + Pearson", "BOW + Cosine", "BOW + Pearson"])
     
     if user_input:
         if recommender_type == "TF-IDF + Cosine":
@@ -485,13 +458,6 @@ if recommender_button:
 
         # Display the recommendations
         st.write(recommendations_df)
-        # Example usage:
-        for anime_title in recommendations_df['Anime']:
-            image_url = search_for_image(anime_title)
-            if image_url:
-                response = requests.get(image_url)
-                img = Image.open(BytesIO(response.content))
-                st.image(img, caption=anime_title, use_column_width=True)
    
     else:
         st.write("Please enter an anime name to get recommendations.")
