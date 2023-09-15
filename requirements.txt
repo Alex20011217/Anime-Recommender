@@ -12,3 +12,4 @@ streamlit
 joblib
 Pillow
 requests
+google-api-python-client
