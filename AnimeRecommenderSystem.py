@@ -421,5 +421,46 @@ def BOW_Pearson_get_recommendations2(recommendations, closest_match):
     print('Anime title: ' + anime_title)
     
     return top_recommendations[0:11]
-st.title("Checkpoint")
+st.title("Anime Recommender System")
+with st.form("recommender"):
+    # Create a selectbox to allow the user to choose the model
+    recommender_type = st.selectbox("Select a prediction type", ["TF-IDF + Cosine", "TF-IDF + Pearson", "BOW + Cosine", "BOW + Pearson"])
 
+    # Create a text input field
+    user_input = st.text_area("Please enter one fo the favorite anime name for more recommendations:", "")
+    
+    # Create a button to make predictions
+    recommender_button = st.form_submit_button("Submit")
+
+if recommender_button:
+    recommender_type = st.selectbox("Select a recommendation type", ["TF-IDF + Cosine", "TF-IDF + Pearson", "BOW + Cosine", "BOW + Pearson"])
+    
+    if user_input:
+        if recommender_type == "TF-IDF + Cosine":
+            # Your TF-IDF + Cosine recommendation code here using user_input
+            RefinedVer_Recommendations = TFIDF_Cosine_get_recommendations1(user_input)
+            recommendations_df = pd.DataFrame(RefinedVer_Recommendations[['Anime', 'cleaned_Genre', 'Description']][0:11])
+            st.write(recommendations_df)
+        
+        elif recommender_type == "TF-IDF + Pearson":
+            # Your TF-IDF + Pearson recommendation code here using user_input
+            Pearson_Recommendations = TFIDF_Pearson_get_recommendations1(user_input)
+            recommendations_df = pd.DataFrame(Pearson_Recommendations[['Anime', 'cleaned_Genre', 'Description']][0:4])
+            st.write(recommendations_df)
+        
+        elif recommender_type == "BOW + Cosine":
+            # Your BOW + Cosine recommendation code here using user_input
+            RefinedVer_Recommendations = BOW_Cosine_get_recommendations1(user_input)
+            recommendations_df = pd.DataFrame(RefinedVer_Recommendations[['Anime', 'cleaned_Genre', 'cleaned_Description']])
+            st.write(recommendations_df)
+        
+        elif recommender_type == "BOW + Pearson":
+            # Your BOW + Pearson recommendation code here using user_input
+            RefinedVer_Recommendations = BOW_Pearson_get_recommendations1(user_input)
+            recommendations_df = pd.DataFrame(RefinedVer_Recommendations[['Anime', 'cleaned_Genre', 'cleaned_Description']][0:4])
+            st.write(recommendations_df)
+        
+        else:
+            st.write("Please select a valid recommendation type.")
+    else:
+        st.write("Please enter an anime name to get recommendations.")
