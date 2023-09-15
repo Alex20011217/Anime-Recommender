@@ -425,26 +425,24 @@ def BOW_Pearson_get_recommendations2(recommendations, closest_match):
 from PIL import Image
 import requests
 from io import BytesIO
+from googleapiclient.discovery import build
 
-# Function to search for an image based on the anime title (similar to what we discussed earlier)
-def search_for_image(anime_title):
-    # Replace this URL with the actual API or image source you want to use
-    base_url = 'https://example.com/images/'
+# Define your custom search engine ID (cx)
+CX = '102547c048ba84fc7D'
 
-    # Replace spaces in the anime_title with '+'
-    formatted_title = anime_title.replace(' ', '+')
+def search_for_image(query):
+    # Create a service object for the Custom Search JSON API
+    service = build("customsearch", "v1")
 
-    # Construct the full URL for the image search
-    image_search_url = f'{base_url}{formatted_title}.jpg'
+    # Perform a search
+    res = service.cse().list(q=query, cx=CX, searchType='image').execute()
 
-    # Send an HTTP GET request to retrieve the image URL
-    response = requests.get(image_search_url)
-
-    # Check if the request was successful (status code 200)
-    if response.status_code == 200:
-        return image_search_url  # Return the image URL
+    # Extract and return the first image URL from the search results
+    if 'items' in res and len(res['items']) > 0:
+        return res['items'][0]['link']
     else:
-        return None  # Return None if no image was found or an error occurred
+        return None
+
 
 st.title("Anime Recommender System")
 with st.form("recommender"):
@@ -483,20 +481,14 @@ if recommender_button:
 
         # Display the recommendations
         st.write(recommendations_df)
-        # Add image search and display below the recommendations
-        images_and_captions = []
-
+        # Example usage:
         for anime_title in recommendations_df['Anime']:
-            image_url = search_for_image(anime_title)  # Implement search_for_image function
-            images_and_captions.append((anime_title, image_url))
-
-        for anime_title, image_url in images_and_captions:
+            image_url = search_for_image(anime_title)
             if image_url:
                 response = requests.get(image_url)
                 img = Image.open(BytesIO(response.content))
                 st.image(img, caption=anime_title, use_column_width=True)
-            else:
-                st.write("No image found")
+
         
     else:
         st.write("Please enter an anime name to get recommendations.")
