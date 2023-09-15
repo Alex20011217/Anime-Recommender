@@ -427,15 +427,12 @@ import requests
 from io import BytesIO
 from googleapiclient.discovery import build
 
-# Define your custom search engine ID (cx)
-CX = '102547c048ba84fc7D'
-
 def search_for_image(query):
     # Create a service object for the Custom Search JSON API
     service = build("customsearch", "v1")
 
     # Perform a search
-    res = service.cse().list(q=query, cx=CX, searchType='image').execute()
+    res = service.cse().list(q=query, cx='102547c048ba84fc7D', searchType='image').execute()
 
     # Extract and return the first image URL from the search results
     if 'items' in res and len(res['items']) > 0:
