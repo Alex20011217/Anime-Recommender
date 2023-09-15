@@ -495,6 +495,8 @@ if recommender_button:
                 response = requests.get(image_url)
                 img = Image.open(BytesIO(response.content))
                 st.image(img, caption=anime_title, use_column_width=True)
+            else:
+                st.write("No image found")
         
     else:
         st.write("Please enter an anime name to get recommendations.")
