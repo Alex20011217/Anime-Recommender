@@ -162,26 +162,21 @@ print ("Matrix shape: " + str(genre_tfidf_matrix.shape))
 genre_tfidf_matrix
 
 #TFIDF + Cosine
+import pickle
 
-TC_Anime_desc_cosine_sim = cosine_similarity(desc_tfidf_matrix,desc_tfidf_matrix)
-TC_Anime_desc_index_sim = pd.Series(anime_data.index, index=anime_data['cleaned_Anime']).drop_duplicates()
-print (TC_Anime_desc_cosine_sim.shape)
-print("==========================================================================")
-print(TC_Anime_desc_cosine_sim)
-print("==========================================================================")
-print(TC_Anime_desc_index_sim.shape)
-print("==========================================================================")
-print(TC_Anime_desc_index_sim.head())
+# Load the cosine similarity matrix and index mapping for description
+with open('TC_Anime_desc_cosine_sim.pkl', 'rb') as f:
+    TC_Anime_desc_cosine_sim = pickle.load(f)
 
-TC_Anime_genre_cosine_sim = cosine_similarity(genre_tfidf_matrix,genre_tfidf_matrix)
-TC_Anime_genre_index_sim = pd.Series(anime_data.index, index=anime_data['cleaned_Anime']).drop_duplicates()
-print (TC_Anime_genre_cosine_sim.shape)
-print("==========================================================================")
-print(TC_Anime_genre_cosine_sim)
-print("==========================================================================")
-print(TC_Anime_genre_index_sim.shape)
-print("==========================================================================")
-print(TC_Anime_genre_index_sim)
+with open('TC_Anime_desc_index_sim.pkl', 'rb') as f:
+    TC_Anime_desc_index_sim = pickle.load(f)
+
+# Load the cosine similarity matrix and index mapping for genre
+with open('TC_Anime_genre_cosine_sim.pkl', 'rb') as f:
+    TC_Anime_genre_cosine_sim = pickle.load(f)
+
+with open('TC_Anime_genre_index_sim.pkl', 'rb') as f:
+    TC_Anime_genre_index_sim = pickle.load(f)
 
 def TFIDF_Cosine_get_recommendations1(user_input):
     closest_match = find_closest_match(user_input, anime_data['cleaned_Anime'])
@@ -221,96 +216,19 @@ def TFIDF_Cosine_get_recommendations2(recommendations, closest_match):
 from scipy.stats import pearsonr
 from tqdm import tqdm  # Import tqdm for progress bar
 
-# Define a function to calculate correlations for a single row
-def calculate_correlations(i):
-    TP_corr_row = []
-    for j in range(len(desc_tfidf_matrix.toarray())):
-        corr, _ = pearsonr(
-            desc_tfidf_matrix[i].toarray().flatten(),
-            desc_tfidf_matrix[j].toarray().flatten()
-        )
-        TP_corr_row.append(corr)
-    return TP_corr_row
+# Load the Pearson correlation results for description
+with open('TP_Anime_desc_pearson_sim.pkl', 'rb') as f:
+    TP_Anime_desc_pearson_sim = pickle.load(f)
 
-# Define a function to calculate Pearson correlations sequentially
-def desc_calculate_pearson_correlations_sequential(desc_tfidf_matrix):
-    # Initialize a list to store Pearson correlations
-    TP_Anime_desc_pearson_corr = []
+with open('TP_Anime_desc_index_sim.pkl', 'rb') as f:
+    TP_Anime_desc_index_sim = pickle.load(f)
 
-    # Use tqdm for a progress bar
-    for i in tqdm(range(len(desc_tfidf_matrix.toarray()))):
-        TP_corr_row = calculate_correlations(i)
-        TP_Anime_desc_pearson_corr.append(TP_corr_row)
+# Load the Pearson correlation results for genre
+with open('TP_Anime_genre_pearson_sim.pkl', 'rb') as f:
+    TP_Anime_genre_pearson_sim = pickle.load(f)
 
-    # Create a DataFrame to hold the correlation values
-    TP_Anime_desc_pearson_sim = pd.DataFrame(TP_Anime_desc_pearson_corr)
-
-    # Create a Series to map anime titles to their indices
-    TP_Anime_desc_index_sim = pd.Series(anime_data.index, index=anime_data['cleaned_Anime']).drop_duplicates()
-
-    return TP_Anime_desc_pearson_sim, TP_Anime_desc_index_sim
-
-def genre_calculate_pearson_correlations_sequential(genre_tfidf_matrix):
-    # Initialize a list to store Pearson correlations for genre
-    TP_Anime_genre_pearson_corr = []
-
-    # Use tqdm for a progress bar
-    for i in tqdm(range(len(genre_tfidf_matrix.toarray()))):
-        TP_corr_row = calculate_correlations(i)
-        TP_Anime_genre_pearson_corr.append(TP_corr_row)
-
-    # Create a DataFrame to hold the correlation values for genre
-    TP_Anime_genre_pearson_sim = pd.DataFrame(TP_Anime_genre_pearson_corr)
-
-    # Create a Series to map anime titles to their indices for genre
-    TP_Anime_genre_index_sim = pd.Series(anime_data.index, index=anime_data['cleaned_Genre']).drop_duplicates()
-
-    return TP_Anime_genre_pearson_sim, TP_Anime_genre_index_sim
-
-
-# Call the function to calculate Pearson correlations sequentially
-TP_Anime_desc_pearson_sim, TP_Anime_desc_index_sim = desc_calculate_pearson_correlations_sequential(desc_tfidf_matrix)
-
-# Print or use the results as needed
-print("Shape of Anime_desc_pearson_sim: " + str(TP_Anime_desc_pearson_sim.shape))
-#print("==========================================================================")
-#print(Anime_desc_pearson_sim)
-print("==========================================================================")
-print("Shape of Anime_desc_index_sim: " + str(TP_Anime_desc_index_sim.shape))
-#print("==========================================================================")
-#print(Anime_desc_index_sim.head())
-
-# Initialize a list to store Pearson correlations
-TP_Anime_genre_pearson_corr = []
-
-def calculate_pearson_correlations_sequential(genre_tfidf_matrix):
-    # Initialize a list to store Pearson correlations
-    TP_Anime_genre_pearson_corr = []
-
-    # Use tqdm for a progress bar
-    for i in tqdm(range(len(genre_tfidf_matrix.toarray()))):
-        TP_corr_row = calculate_correlations(i)
-        TP_Anime_genre_pearson_corr.append(TP_corr_row)
-
-    # Create a DataFrame to hold the correlation values
-    TP_Anime_genre_pearson_sim = pd.DataFrame(TP_Anime_genre_pearson_corr)
-
-    # Create a Series to map anime titles to their indices
-    TP_Anime_genre_index_sim = pd.Series(anime_data.index, index=anime_data['cleaned_Genre']).drop_duplicates()
-
-    return TP_Anime_genre_pearson_sim, TP_Anime_genre_index_sim
-
-# Call the function to calculate Pearson correlations sequentially
-TP_Anime_genre_pearson_sim, TP_Anime_genre_index_sim = genre_calculate_pearson_correlations_sequential(genre_tfidf_matrix)
-
-# Print or use the results as needed
-print("Shape of Anime_desc_pearson_sim: " + str(TP_Anime_desc_pearson_sim.shape))
-print("==========================================================================")
-#print(Anime_genre_pearson_sim)
-#print("==========================================================================")
-print("Shape of Anime_genre_index_sim: " + str(TP_Anime_genre_index_sim.shape))
-#print("==========================================================================")
-#print(Anime_genre_index_sim)
+with open('TP_Anime_genre_index_sim.pkl', 'rb') as f:
+    TP_Anime_genre_index_sim = pickle.load(f)
 
 def TFIDF_Pearson_get_recommendations1(user_input):
     closest_match = find_closest_match(user_input, anime_data['cleaned_Anime'])
@@ -385,45 +303,19 @@ genre_count_matrix
 
 #BOW + Cosine
 
-# Create the CountVectorizer
-desc_count_vectorizer = CountVectorizer(stop_words='english')
+# Load the cosine similarity matrix and index mapping for description (BOW)
+with open('BC_Anime_desc_cosine_sim.pkl', 'rb') as f:
+    BC_Anime_desc_cosine_sim = pickle.load(f)
 
-# Fit the vectorizer with your description data
-desc_count_matrix = desc_count_vectorizer.fit_transform(anime_data['cleaned_Description'])
+with open('BC_Anime_desc_index_sim.pkl', 'rb') as f:
+    BC_Anime_desc_index_sim = pickle.load(f)
 
-# Calculate cosine similarity using the BOW representation
-BC_Anime_desc_cosine_sim = cosine_similarity(desc_count_matrix, desc_count_matrix)
+# Load the cosine similarity matrix and index mapping for genre (BOW)
+with open('BC_Anime_genre_cosine_sim.pkl', 'rb') as f:
+    BC_Anime_genre_cosine_sim = pickle.load(f)
 
-# Create a Series to map anime titles to their indices
-BC_Anime_desc_index_sim = pd.Series(anime_data.index, index=anime_data['cleaned_Anime']).drop_duplicates()
-
-print("Shape of Anime_desc_cosine_sim: " + str(BC_Anime_desc_cosine_sim.shape))
-print("==========================================================================")
-print(BC_Anime_desc_cosine_sim)
-print("==========================================================================")
-print("Shape of Anime_desc_index_sim: " + str(BC_Anime_desc_index_sim.shape))
-print("==========================================================================")
-print(BC_Anime_desc_index_sim.head())
-
-# Create the CountVectorizer
-genre_count_vectorizer = CountVectorizer(stop_words='english')
-
-# Fit the vectorizer with your genre data
-genre_count_matrix = genre_count_vectorizer.fit_transform(anime_data['cleaned_Genre'])
-
-# Calculate cosine similarity using the BOW representation
-BC_Anime_genre_cosine_sim = cosine_similarity(genre_count_matrix, genre_count_matrix)
-
-# Create a Series to map anime titles to their indices
-BC_Anime_genre_index_sim = pd.Series(anime_data.index, index=anime_data['cleaned_Anime']).drop_duplicates()
-
-print("Shape of Anime_genre_cosine_sim: " + str(BC_Anime_genre_cosine_sim.shape))
-print("==========================================================================")
-print(BC_Anime_genre_cosine_sim)
-print("==========================================================================")
-print("Shape of Anime_genre_index_sim: " + str(BC_Anime_genre_index_sim.shape))
-print("==========================================================================")
-print(BC_Anime_genre_index_sim)
+with open('BC_Anime_genre_index_sim.pkl', 'rb') as f:
+    BC_Anime_genre_index_sim = pickle.load(f)
 
 def BOW_Cosine_get_recommendations1(user_input):
     closest_match = find_closest_match(user_input, anime_data['cleaned_Anime'])
@@ -483,78 +375,19 @@ from sklearn.metrics.pairwise import cosine_similarity
 from scipy.stats import pearsonr
 from tqdm import tqdm  # Import tqdm for progress bar
 
-# Create the CountVectorizer
-desc_count_vectorizer = CountVectorizer(stop_words='english')
+# Load the Pearson correlation matrix and index mapping for description (BOW)
+with open('BP_Anime_desc_pearson_sim.pkl', 'rb') as f:
+    BP_Anime_desc_pearson_sim_df = pickle.load(f)
 
-# Fit the vectorizer with your description data
-desc_count_matrix = desc_count_vectorizer.fit_transform(anime_data['cleaned_Description'])
+with open('BP_Anime_desc_index_sim.pkl', 'rb') as f:
+    BP_Anime_desc_index_sim = pickle.load(f)
 
-# Calculate Pearson correlation using the BOW representation
-BC_Anime_desc_pearson_sim = np.zeros((len(anime_data), len(anime_data)))
+# Load the Pearson correlation matrix and index mapping for genre (BOW)
+with open('BP_Anime_genre_pearson_sim.pkl', 'rb') as f:
+    BP_Anime_genre_pearson_sim_df = pickle.load(f)
 
-# Iterate through each pair of anime titles
-for i in tqdm(range(len(anime_data)), desc="Calculating Pearson Correlations"):
-    for j in range(len(anime_data)):
-        if i != j:  # Exclude self-comparisons
-            corr, _ = pearsonr(
-                desc_count_matrix[i].toarray().flatten(),
-                desc_count_matrix[j].toarray().flatten()
-            )
-            BC_Anime_desc_pearson_sim[i, j] = corr
-
-# Create a DataFrame to hold the correlation values
-BC_Anime_desc_pearson_sim_df = pd.DataFrame(BC_Anime_desc_pearson_sim, index=anime_data['cleaned_Anime'], columns=anime_data['cleaned_Anime'])
-
-# Create a Series to map anime titles to their indices
-BC_Anime_desc_index_sim = pd.Series(anime_data.index, index=anime_data['cleaned_Anime']).drop_duplicates()
-
-print("Shape of Anime_desc_pearson_sim: " + str(BC_Anime_desc_pearson_sim_df.shape))
-print("==========================================================================")
-print(BC_Anime_desc_pearson_sim_df)
-print("==========================================================================")
-print("Shape of Anime_desc_index_sim: " + str(BC_Anime_desc_index_sim.shape))
-print("==========================================================================")
-print(BC_Anime_desc_index_sim.head())
-
-BC_Anime_genre_pearson_sim = None  # Initialize it in the outer block
-
-# Define a function to calculate Anime_genre_pearson_sim
-def calculate_genre_pearson_sim(anime_data):
-    # Create the CountVectorizer for genre data
-    genre_count_vectorizer = CountVectorizer(stop_words='english')
-
-    # Fit the vectorizer with your genre data
-    genre_count_matrix = genre_count_vectorizer.fit_transform(anime_data['cleaned_Genre'])
-
-    # Calculate Pearson correlation using the BOW representation
-    BC_Anime_genre_pearson_sim = np.zeros((len(anime_data), len(anime_data)))
-
-    for i in tqdm(range(len(anime_data)), desc="Calculating Pearson Correlations for Genre"):
-        for j in range(len(anime_data)):
-            if i != j:  # Exclude self-comparisons
-                BC_corr, _ = pearsonr(
-                    genre_count_matrix[i].toarray().flatten(),
-                    genre_count_matrix[j].toarray().flatten()
-                )
-                BC_Anime_genre_pearson_sim[i, j] = BC_corr
-
-    return BC_Anime_genre_pearson_sim
-
-BC_Anime_genre_pearson_sim = calculate_genre_pearson_sim(anime_data)
-
-# Create a DataFrame to hold the correlation values
-BC_Anime_genre_pearson_sim_df = pd.DataFrame(BC_Anime_genre_pearson_sim, index=anime_data['cleaned_Anime'], columns=anime_data['cleaned_Anime'])
-
-# Create a Series to map anime titles to their indices
-BC_Anime_genre_index_sim = pd.Series(anime_data.index, index=anime_data['cleaned_Anime']).drop_duplicates()
-
-print("Shape of Anime_genre_pearson_sim: " + str(BC_Anime_genre_pearson_sim_df.shape))
-print("==========================================================================")
-print(BC_Anime_genre_pearson_sim_df)
-print("==========================================================================")
-print("Shape of Anime_genre_index_sim: " + str(BC_Anime_genre_index_sim.shape))
-print("==========================================================================")
-print(BC_Anime_genre_index_sim)
+with open('BP_Anime_genre_index_sim.pkl', 'rb') as f:
+    BP_Anime_genre_index_sim = pickle.load(f)
 
 def BOW_Pearson_get_recommendations1(user_input):
     closest_match = find_closest_match(user_input, anime_data['cleaned_Anime'])
