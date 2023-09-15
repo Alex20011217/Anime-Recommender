@@ -480,8 +480,5 @@ if recommender_button:
         else:
             st.write(f"No image found for {anime_title}")
         
-        
-        else:
-            st.write("Please select a valid recommendation type.")
     else:
         st.write("Please enter an anime name to get recommendations.")
