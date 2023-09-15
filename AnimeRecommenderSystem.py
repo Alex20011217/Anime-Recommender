@@ -439,25 +439,25 @@ if recommender_button:
         if recommender_type == "TF-IDF + Cosine":
             # Your TF-IDF + Cosine recommendation code here using user_input
             RefinedVer_Recommendations = TFIDF_Cosine_get_recommendations1(user_input)
-            recommendations_df = pd.DataFrame(RefinedVer_Recommendations[['Anime', 'cleaned_Genre', 'Description']][0:11])
+            recommendations_df = pd.DataFrame(RefinedVer_Recommendations[['Anime', 'cleaned_Genre', 'Description']][:4])
             st.write(recommendations_df)
-        
+    
         elif recommender_type == "TF-IDF + Pearson":
             # Your TF-IDF + Pearson recommendation code here using user_input
             Pearson_Recommendations = TFIDF_Pearson_get_recommendations1(user_input)
-            recommendations_df = pd.DataFrame(Pearson_Recommendations[['Anime', 'cleaned_Genre', 'Description']][0:4])
+            recommendations_df = pd.DataFrame(Pearson_Recommendations[['Anime', 'cleaned_Genre', 'Description']][:4])
             st.write(recommendations_df)
-        
+    
         elif recommender_type == "BOW + Cosine":
             # Your BOW + Cosine recommendation code here using user_input
             RefinedVer_Recommendations = BOW_Cosine_get_recommendations1(user_input)
-            recommendations_df = pd.DataFrame(RefinedVer_Recommendations[['Anime', 'cleaned_Genre', 'cleaned_Description']])
+            recommendations_df = pd.DataFrame(RefinedVer_Recommendations[['Anime', 'cleaned_Genre', 'cleaned_Description']][:4])
             st.write(recommendations_df)
-        
+    
         elif recommender_type == "BOW + Pearson":
             # Your BOW + Pearson recommendation code here using user_input
             RefinedVer_Recommendations = BOW_Pearson_get_recommendations1(user_input)
-            recommendations_df = pd.DataFrame(RefinedVer_Recommendations[['Anime', 'cleaned_Genre', 'cleaned_Description']][0:4])
+            recommendations_df = pd.DataFrame(RefinedVer_Recommendations[['Anime', 'cleaned_Genre', 'cleaned_Description']][:4])
             st.write(recommendations_df)
         
         else:
