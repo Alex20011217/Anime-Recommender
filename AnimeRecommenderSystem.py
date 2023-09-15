@@ -426,6 +426,26 @@ from PIL import Image
 import requests
 from io import BytesIO
 
+# Function to search for an image based on the anime title (similar to what we discussed earlier)
+def search_for_image(anime_title):
+    # Replace this URL with the actual API or image source you want to use
+    base_url = 'https://example.com/images/'
+
+    # Replace spaces in the anime_title with '+'
+    formatted_title = anime_title.replace(' ', '+')
+
+    # Construct the full URL for the image search
+    image_search_url = f'{base_url}{formatted_title}.jpg'
+
+    # Send an HTTP GET request to retrieve the image URL
+    response = requests.get(image_search_url)
+
+    # Check if the request was successful (status code 200)
+    if response.status_code == 200:
+        return image_search_url  # Return the image URL
+    else:
+        return None  # Return None if no image was found or an error occurred
+
 st.title("Anime Recommender System")
 with st.form("recommender"):
     # Create a selectbox to allow the user to choose the model
@@ -466,19 +486,24 @@ if recommender_button:
 
         # Fetch and display images for each recommended anime
         st.write("Images for Recommended Anime:")
+        # Create a list to store images and their captions
+        images_and_captions = []
+
         for _, row in recommendations_df.iterrows():
             anime_title = row['Anime']
-        
-            # Use the anime title to search for images (you need to implement this part)
-            image_url = search_for_image(anime_title)  # Implement search_for_image function
-        
-        # Display the image below the anime title
+    
+        # Use the anime title to search for images
+            image_url = search_for_image(anime_title)
+    
+        # If an image URL is found, add it to the list
         if image_url:
+            images_and_captions.append((anime_title, image_url))
+
+        # Display the images below the anime titles
+        for anime_title, image_url in images_and_captions:
             response = requests.get(image_url)
             img = Image.open(BytesIO(response.content))
             st.image(img, caption=anime_title, use_column_width=True)
-        else:
-            st.write(f"No image found for {anime_title}")
         
     else:
         st.write("Please enter an anime name to get recommendations.")
