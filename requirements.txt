@@ -10,7 +10,4 @@ tqdm
 wordcloud
 streamlit
 joblib
-Pillow
-requests
-google-api-python-client==2.34.0
 
