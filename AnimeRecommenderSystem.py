@@ -394,10 +394,10 @@ with open('BP_Anime_genre_index_sim.pkl', 'rb') as f:
 
 def BOW_Pearson_get_recommendations1(user_input):
     closest_match = find_closest_match(user_input, anime_data['cleaned_Anime'])
-    idx = BC_Anime_desc_index_sim[closest_match]
-    BC_sim_scores = list(enumerate(BC_Anime_desc_pearson_sim_df.iloc[idx]))
-    BC_sim_scores = sorted(BC_sim_scores, key=lambda x: x[1], reverse=True)
-    anime_indices = [i[0] for i in BC_sim_scores]
+    idx = BP_Anime_desc_index_sim[closest_match]
+    BP_sim_scores = list(enumerate(BP_Anime_desc_pearson_sim_df.iloc[idx]))
+    BP_sim_scores = sorted(BP_sim_scores, key=lambda x: x[1], reverse=True)
+    anime_indices = [i[0] for i in BP_sim_scores]
     print("Closest match: " + closest_match)
     VerOne_Recommendations = anime_data.iloc[anime_indices]
     
@@ -412,8 +412,8 @@ def BOW_Pearson_get_recommendations2(recommendations, closest_match):
     anime_title = closest_match
     idx = 0
     
-    BC_sim_scores = list(enumerate(BC_Anime_genre_pearson_sim_df.iloc[idx]))
-    BC_sim_scores = sorted(BC_sim_scores, key=lambda x: x[1], reverse=True)
+    BP_sim_scores = list(enumerate(BP_Anime_genre_pearson_sim_df.iloc[idx]))
+    BP_sim_scores = sorted(BP_sim_scores, key=lambda x: x[1], reverse=True)
     anime_indices = [i[0] for i in BC_sim_scores]
     
     top_recommendations = anime_data.iloc[anime_indices]
