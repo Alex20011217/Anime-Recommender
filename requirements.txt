@@ -9,4 +9,4 @@ seaborn
 tqdm
 wordcloud
 streamlit
-pickle
+joblib
