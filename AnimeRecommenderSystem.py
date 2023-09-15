@@ -483,27 +483,6 @@ if recommender_button:
 
         # Display the recommendations
         st.write(recommendations_df)
-
-        # Fetch and display images for each recommended anime
-        st.write("Images for Recommended Anime:")
-        # Create a list to store images and their captions
-        images_and_captions = []
-
-        for _, row in recommendations_df.iterrows():
-            anime_title = row['Anime']
-    
-        # Use the anime title to search for images
-            image_url = search_for_image(anime_title)
-    
-        # If an image URL is found, add it to the list
-        if image_url:
-            images_and_captions.append((anime_title, image_url))
-
-        # Display the images below the anime titles
-        for anime_title, image_url in images_and_captions:
-            response = requests.get(image_url)
-            img = Image.open(BytesIO(response.content))
-            st.image(img, caption=anime_title, use_column_width=True)
         
     else:
         st.write("Please enter an anime name to get recommendations.")
