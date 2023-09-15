@@ -215,10 +215,7 @@ def TFIDF_Cosine_get_recommendations2(recommendations, closest_match):
     
     return top_recommendations[['Anime', 'cleaned_Genre', 'Description']]
 
-#Final version of anime recommendations
-user_input = input('Please enter one fo the favorite anime name for more recommendations: ')
-RefinedVer_Recommendations = TFIDF_Cosine_get_recommendations1(user_input)
-pd.DataFrame(RefinedVer_Recommendations[['Anime', 'cleaned_Genre', 'Description']][0:11])
+
 
 #TFIDF + Pearson
 from scipy.stats import pearsonr
@@ -354,10 +351,6 @@ def TFIDF_Pearson_get_recommendations2(recommendations, closest_match):
     
     return recommendations.iloc[anime_indices[0:11]]
 
-# Example of using Pearson correlation-based recommendations
-user_input = input('Please enter one fo the favorite anime name for more recommendations: ')
-Pearson_Recommendations = TFIDF_Pearson_get_recommendations1(user_input)
-pd.DataFrame(Pearson_Recommendations[['Anime', 'cleaned_Genre', 'Description']][0:4])
 
 #BOW
 from sklearn.feature_extraction.text import CountVectorizer
@@ -479,10 +472,7 @@ Anime_desc_cosine_sim = cosine_similarity(desc_count_matrix, desc_count_matrix)
 # Create a Series to map anime titles to their indices
 Anime_desc_index_sim = pd.Series(anime_data.index, index=anime_data['cleaned_Anime']).drop_duplicates()
 
-# Final version of anime recommendations using BOW and cosine similarity
-user_input = input('Please enter one fo the favorite anime name for more recommendations: ')
-RefinedVer_Recommendations = BOW_Cosine_get_recommendations1(user_input)
-pd.DataFrame(RefinedVer_Recommendations[['Anime', 'cleaned_Genre', 'cleaned_Description']])
+
 
 #BOW + Pearson
 
@@ -596,7 +586,4 @@ def BOW_Pearson_get_recommendations2(recommendations, closest_match):
     
     return top_recommendations[0:11]
 
-# Final version of anime recommendations using BOW and Pearson correlation for genre
-user_input = input('Please enter one fo the favorite anime name for more recommendations: ')
-RefinedVer_Recommendations = BOW_Pearson_get_recommendations1(user_input)
-pd.DataFrame(RefinedVer_Recommendations[['Anime', 'cleaned_Genre', 'cleaned_Description']][0:4])
+
