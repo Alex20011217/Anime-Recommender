@@ -13,6 +13,7 @@ from wordcloud import WordCloud, STOPWORDS
 import warnings
 
 nltk.download('punkt')
+nltk.download('stopwords')
 
 warnings.filterwarnings("ignore")
 
