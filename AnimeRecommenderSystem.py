@@ -424,7 +424,7 @@ def BOW_Pearson_get_recommendations2(recommendations, closest_match):
 st.title("Anime Recommender System")
 with st.form("recommender"):
     # Create a selectbox to allow the user to choose the model
-    recommender_type = st.selectbox("Select a prediction type", ["TF-IDF + Cosine", "TF-IDF + Pearson", "BOW + Cosine", "BOW + Pearson"])
+    recommender_type = st.selectbox("Select a recommender type", ["TF-IDF + Cosine", "TF-IDF + Pearson", "BOW + Cosine", "BOW + Pearson"])
 
     # Create a text input field
     user_input = st.text_area("Please enter one fo the favorite anime name for more recommendations:", "")
