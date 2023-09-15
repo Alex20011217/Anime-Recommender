@@ -425,6 +425,28 @@ def BOW_Pearson_get_recommendations2(recommendations, closest_match):
 from PIL import Image
 import requests
 from io import BytesIO
+from googleapiclient.discovery import build
+
+# Define your Custom Search Engine ID (CX)
+CX = '102547c048ba84fc7D'  # Replace with your actual CX
+
+def search_for_image(anime_title):
+    try:
+        # Create a service object for the Custom Search JSON API
+        service = build("customsearch", "v1")
+
+        # Perform a search for images related to the anime title
+        res = service.cse().list(q=anime_title, cx=CX, searchType='image').execute()
+
+        # Extract and return the first image URL from the search results
+        if 'items' in res and len(res['items']) > 0:
+            return res['items'][0]['link']
+        else:
+            return None
+    except Exception as e:
+        print(f"Error searching for image: {e}")
+        return None
+
 
 st.title("Anime Recommender System")
 with st.form("recommender"):
@@ -470,8 +492,6 @@ if recommender_button:
                 response = requests.get(image_url)
                 img = Image.open(BytesIO(response.content))
                 st.image(img, caption=anime_title, use_column_width=True)
-
-
-        
+   
     else:
         st.write("Please enter an anime name to get recommendations.")
